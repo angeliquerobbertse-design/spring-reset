@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Spring Reset — IOL × Volt.Africa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Archivo:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SPRING RESET — "The Thaw"
+   A seasonal behaviour platform · IOL × Volt.Africa
+   Design system: winter cold → spring warmth.
+   Five territories, five colour worlds.
+   ============================================================ */
+:root{
+  /* Winter world */
+  --winter-bg:#0d1320;
+  --winter-bg2:#131c2e;
+  --winter-ink:#e7edf6;
+  --winter-mute:#8fa1bc;
+  --frost:#39496a;
+
+  /* Spring base */
+  --paper:#faf5ec;
+  --paper-2:#f3ecdd;
+  --ink:#26221a;
+  --ink-soft:#5c554a;
+  --hair:rgba(38,34,26,.14);
+
+  /* Territory colour worlds */
+  --home:#b3572e;   --home-tint:#f6e5da;  --home-deep:#7c3a1d;
+  --body:#d9483f;   --body-tint:#fbe4de;  --body-deep:#9c2f28;
+  --money:#1d5c45;  --money-tint:#e0ecdf; --money-deep:#123c2d;
+  --life:#2f5ec4;   --life-tint:#e2e9f8;  --life-deep:#1e3f8a;
+  --style:#c4568c;  --style-tint:#f9e4ee; --style-deep:#8e3a63;
+
+  --serif:"Fraunces",Georgia,serif;
+  --sans:"Archivo",Helvetica,Arial,sans-serif;
+
+  --rail-w:min(92vw,1120px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  background:var(--paper);
+  color:var(--ink);
+  overflow-x:hidden;
+  line-height:1.55;
+}
+::selection{background:#ffd98a;color:var(--ink)}
+img{max-width:100%}
+
+/* grain over everything, very subtle */
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+}
+
+/* ---------- progress bar ---------- */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:80;background:var(--home);transition:background .5s}
+
+/* ---------- chapter rail (mobile bottom / desktop right) ---------- */
+#rail{
+  position:fixed;z-index:70;display:flex;gap:14px;
+  left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));
+  background:rgba(250,245,236,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--hair);border-radius:999px;padding:9px 16px;
+  opacity:0;pointer-events:none;transition:opacity .4s;
+}
+#rail.on{opacity:1;pointer-events:auto}
+#rail a{width:11px;height:11px;border-radius:50%;display:block;border:1.6px solid var(--ink-soft);transition:.25s;position:relative}
+#rail a[data-c="home"].live{background:var(--home);border-color:var(--home);transform:scale(1.35)}
+#rail a[data-c="body"].live{background:var(--body);border-color:var(--body);transform:scale(1.35)}
+#rail a[data-c="money"].live{background:var(--money);border-color:var(--money);transform:scale(1.35)}
+#rail a[data-c="life"].live{background:var(--life);border-color:var(--life);transform:scale(1.35)}
+#rail a[data-c="style"].live{background:var(--style);border-color:var(--style);transform:scale(1.35)}
+
+/* ---------- intro overlay: the cold open ---------- */
+#intro{
+  position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;
+  background:radial-gradient(120% 90% at 50% 10%, #16233a 0%, var(--winter-bg) 60%);
+  color:var(--winter-ink);text-align:center;padding:24px;
+  transition:opacity 1.4s ease, filter 1.4s ease;
+}
+#intro .frost-line{font-family:var(--serif);font-weight:340;font-style:italic;font-size:clamp(1.5rem,5.4vw,2.6rem);color:var(--winter-mute);letter-spacing:.01em;opacity:0;animation:introIn 1.1s .3s forwards}
+#intro .frost-big{font-family:var(--serif);font-weight:560;font-size:clamp(2.2rem,8.5vw,4.4rem);letter-spacing:-.01em;opacity:0;animation:introIn 1.1s .9s forwards}
+#intro small{font-family:var(--sans);letter-spacing:.32em;text-transform:uppercase;font-size:.66rem;color:var(--winter-mute);opacity:0;animation:introIn 1s 1.5s forwards}
+#intro.melt{opacity:0;filter:blur(14px);pointer-events:none}
+@keyframes introIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---------- shared section chrome ---------- */
+section{position:relative}
+.rail{width:var(--rail-w);margin:0 auto}
+.kicker{font-size:.68rem;letter-spacing:.34em;text-transform:uppercase;font-weight:700;color:var(--ink-soft);display:flex;align-items:center;gap:12px}
+.kicker::before{content:"";width:26px;height:1.5px;background:currentColor;opacity:.5}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}.d5{transition-delay:.4s}
+
+/* ---------- HERO ---------- */
+#hero{
+  min-height:100svh;display:flex;flex-direction:column;justify-content:space-between;
+  padding:calc(20px + env(safe-area-inset-top)) 0 34px;
+  background:
+    radial-gradient(90% 55% at 85% 0%, rgba(255,214,140,.5), transparent 60%),
+    radial-gradient(80% 60% at 0% 100%, rgba(178,214,170,.55), transparent 62%),
+    linear-gradient(175deg,#fdf9f0 0%,var(--paper) 55%,#f2ebd9 100%);
+}
+#hero .topbar{display:flex;justify-content:space-between;align-items:center;padding:0 5vw;font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;font-weight:700;color:var(--ink-soft)}
+#hero .topbar b{color:var(--ink)}
+#hero .stage{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 5vw}
+.masthead{
+  font-family:var(--serif);font-weight:640;letter-spacing:-.028em;line-height:.92;
+  font-size:clamp(3.4rem,15.5vw,10.5rem);
+}
+.masthead em{font-style:italic;font-weight:380}
+.drumline{
+  margin-top:clamp(18px,4vw,34px);
+  font-family:var(--serif);font-style:italic;font-weight:420;
+  font-size:clamp(1.9rem,8.2vw,4.6rem);line-height:1.05;letter-spacing:-.01em;
+  min-height:1.2em;display:flex;gap:.35em;align-items:baseline;flex-wrap:wrap;
+}
+.drumline .fixed{color:var(--ink-soft)}
+#drum{display:inline-block;position:relative;font-weight:640;font-style:italic}
+#drum span{display:inline-block}
+#drum .out{animation:wordOut .45s forwards}
+#drum .inn{animation:wordIn .55s forwards}
+@keyframes wordOut{to{opacity:0;transform:translateY(-.55em) rotate(-2deg);filter:blur(3px)}}
+@keyframes wordIn{from{opacity:0;transform:translateY(.55em) rotate(2deg);filter:blur(3px)}to{opacity:1;transform:none;filter:none}}
+.hero-sub{margin-top:clamp(22px,5vw,40px);max-width:34em;color:var(--ink-soft);font-size:clamp(.95rem,2.8vw,1.08rem)}
+.hero-foot{display:flex;justify-content:space-between;align-items:flex-end;padding:0 5vw;gap:16px}
+.hero-foot .season{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;font-weight:700;color:var(--ink-soft)}
+.scrollcue{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-soft)}
+.scrollcue i{width:1.5px;height:34px;background:linear-gradient(var(--ink-soft),transparent);display:block;animation:drip 1.8s infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ---------- WINTER (the insight) ---------- */
+#winter{
+  background:
+    radial-gradient(110% 70% at 50% -10%, #1a2740 0%, var(--winter-bg) 55%),
+    var(--winter-bg);
+  color:var(--winter-ink);
+  padding:clamp(84px,14vw,150px) 0 clamp(70px,10vw,120px);
+}
+#winter .kicker{color:var(--winter-mute)}
+#winter h2{font-family:var(--serif);font-weight:560;letter-spacing:-.02em;line-height:1.02;font-size:clamp(2.4rem,9.5vw,5.6rem);margin:26px 0 10px;max-width:11em}
+#winter h2 em{font-style:italic;font-weight:340;color:#b9c8e0}
+.friction{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:rgba(143,161,188,.22);border:1px solid rgba(143,161,188,.22);margin-top:clamp(34px,6vw,60px)}
+.friction div{background:var(--winter-bg2);padding:20px 16px 24px;font-size:.86rem;color:var(--winter-mute)}
+.friction div b{display:block;font-family:var(--serif);font-size:1.5rem;font-weight:520;color:var(--winter-ink);margin-bottom:6px;letter-spacing:-.01em}
+.tensions{margin-top:clamp(44px,7vw,80px);display:flex;flex-direction:column;gap:14px}
+.tension{
+  font-family:var(--serif);font-style:italic;font-weight:380;
+  font-size:clamp(1.25rem,4.6vw,2.1rem);color:#c7d3e8;
+  border-left:2px solid var(--frost);padding:4px 0 4px 18px;
+}
+.tension small{display:block;font-family:var(--sans);font-style:normal;font-weight:700;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--winter-mute);margin-top:6px}
+#winter .point{margin-top:clamp(40px,7vw,70px);font-size:.8rem;letter-spacing:.26em;text-transform:uppercase;font-weight:700;color:#ffd98a}
+
+/* ---------- THAW strip ---------- */
+#thaw{
+  padding:clamp(90px,16vw,170px) 0;text-align:center;
+  background:linear-gradient(180deg,var(--winter-bg) 0%, #33405c 16%, #7e7f77 38%, #cfc39b 60%, var(--paper) 86%);
+  color:var(--paper);
+}
+#thaw p{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(1.7rem,6.4vw,3.4rem);line-height:1.15;max-width:16em;margin:0 auto;letter-spacing:-.01em;text-shadow:0 1px 30px rgba(13,19,32,.35)}
+#thaw p b{font-style:normal;font-weight:640}
+#thaw .sun{width:clamp(70px,12vw,110px);height:clamp(70px,12vw,110px);border-radius:50%;margin:0 auto clamp(26px,5vw,44px);background:radial-gradient(circle at 38% 34%, #ffe9b0, #ffb75e 70%);box-shadow:0 0 70px 22px rgba(255,193,101,.5);animation:rise 4s ease-out both}
+@keyframes rise{from{transform:translateY(46px);opacity:0}to{transform:none;opacity:1}}
+
+/* ---------- NUMBERS ---------- */
+#numbers{padding:clamp(60px,9vw,110px) 0 clamp(70px,10vw,120px)}
+#numbers h2{font-family:var(--serif);font-weight:600;letter-spacing:-.02em;font-size:clamp(2rem,7.5vw,4rem);margin:22px 0 8px}
+#numbers .lede{color:var(--ink-soft);max-width:36em}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--hair);border:1px solid var(--hair);margin-top:clamp(30px,5vw,50px)}
+.stat{background:var(--paper);padding:26px 18px 30px}
+.stat .num{font-family:var(--serif);font-weight:600;letter-spacing:-.03em;font-size:clamp(2.4rem,8vw,3.8rem);line-height:1}
+.stat .num sup{font-size:.42em;font-weight:500;vertical-align:.75em;letter-spacing:0}
+.stat .lbl{margin-top:8px;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:700;color:var(--ink-soft)}
+.stat:nth-child(1) .num{color:var(--money)}
+.stat:nth-child(2) .num{color:var(--home)}
+.stat:nth-child(3) .num{color:var(--life)}
+.stat:nth-child(4) .num{color:var(--body)}
+.stat:nth-child(5) .num{color:var(--style)}
+
+/* ---------- TERRITORY INDEX ---------- */
+#territories-index{padding:0 0 clamp(70px,10vw,120px)}
+.idx-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:26px}
+.idx-head h2{font-family:var(--serif);font-weight:600;letter-spacing:-.02em;font-size:clamp(2rem,7.5vw,4rem)}
+.idx-head p{color:var(--ink-soft);max-width:26em}
+.idx{display:flex;flex-direction:column;border-top:1px solid var(--hair)}
+.idx a{
+  display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;
+  padding:18px 4px;border-bottom:1px solid var(--hair);text-decoration:none;color:var(--ink);
+  transition:padding .3s ease, background .3s ease;
+}
+.idx a:active,.idx a:hover{padding-left:14px}
+.idx .no{font-size:.7rem;font-weight:700;letter-spacing:.2em;color:var(--ink-soft)}
+.idx .nm{font-family:var(--serif);font-weight:560;letter-spacing:-.015em;font-size:clamp(1.5rem,6vw,2.5rem);line-height:1.05}
+.idx .nm em{font-style:italic;font-weight:360;font-size:.62em;color:var(--ink-soft);display:block}
+.idx .dotc{width:14px;height:14px;border-radius:50%}
+.idx a[data-c="home"]:hover .nm,.idx a[data-c="home"]:active .nm{color:var(--home)}
+.idx a[data-c="body"]:hover .nm,.idx a[data-c="body"]:active .nm{color:var(--body)}
+.idx a[data-c="money"]:hover .nm,.idx a[data-c="money"]:active .nm{color:var(--money)}
+.idx a[data-c="life"]:hover .nm,.idx a[data-c="life"]:active .nm{color:var(--life)}
+.idx a[data-c="style"]:hover .nm,.idx a[data-c="style"]:active .nm{color:var(--style)}
+
+/* ---------- CHAPTERS ---------- */
+.chapter{padding:clamp(72px,11vw,130px) 0 clamp(60px,9vw,110px)}
+.chapter .rail{display:flex;flex-direction:column;gap:clamp(26px,4vw,40px)}
+.ch-head .idxno{font-size:.68rem;letter-spacing:.32em;text-transform:uppercase;font-weight:700;opacity:.75}
+.ch-head h2{font-family:var(--serif);font-weight:640;letter-spacing:-.028em;line-height:.95;font-size:clamp(3rem,13vw,7.5rem);margin-top:10px}
+.ch-quote{
+  font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:clamp(1.3rem,5vw,2.2rem);line-height:1.22;max-width:22em;
+}
+.ch-quote::before{content:"“ ";opacity:.5}
+.ch-quote::after{content:" ”";opacity:.5}
+.cards{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:820px){.cards{grid-template-columns:1fr 1fr}}
+.card{
+  background:rgba(255,255,255,.62);border:1px solid var(--hair);border-radius:18px;
+  padding:22px 20px 24px;backdrop-filter:blur(4px);
+}
+.card h3{font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.card h3::after{content:"";flex:1;height:1px;background:var(--hair)}
+.card ul{list-style:none;display:flex;flex-direction:column;gap:8px;font-size:.92rem;color:var(--ink-soft)}
+.card ul li{padding-left:18px;position:relative}
+.card ul li::before{content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;border-radius:50%}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:8px 13px;border-radius:999px;border:1.4px solid;background:transparent}
+.wchip{font-size:.78rem;font-weight:600;padding:9px 14px;border-radius:12px;color:#fff;display:inline-flex;align-items:center;gap:7px}
+.wchip::before{content:"✦";font-size:.7em;opacity:.85}
+/* angles accordions */
+.angles details{border:1px solid var(--hair);border-radius:14px;background:rgba(255,255,255,.55);margin-bottom:10px;overflow:hidden}
+.angles summary{
+  cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:15px 18px;font-family:var(--serif);font-weight:560;font-size:clamp(1.02rem,3.6vw,1.2rem);letter-spacing:-.01em;
+}
+.angles summary::-webkit-details-marker{display:none}
+.angles summary .pm{font-family:var(--sans);font-weight:400;font-size:1.3rem;line-height:1;transition:transform .3s}
+.angles details[open] summary .pm{transform:rotate(45deg)}
+.angles .body{padding:0 18px 16px}
+.angles .body ul{list-style:none;display:flex;flex-direction:column;gap:7px;font-size:.9rem;color:var(--ink-soft)}
+.angles .body li{padding-left:16px;position:relative}
+.angles .body li::before{content:"—";position:absolute;left:0;opacity:.5}
+.prize{
+  border-radius:18px;padding:22px 20px;color:#fff;display:flex;flex-direction:column;gap:6px;
+  font-size:.95rem;position:relative;overflow:hidden;
+}
+.prize b{font-family:var(--serif);font-weight:600;font-size:clamp(1.15rem,4.4vw,1.5rem);letter-spacing:-.01em;line-height:1.2}
+.prize small{opacity:.85;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700}
+.prize::after{content:"✦";position:absolute;right:-10px;bottom:-26px;font-size:7rem;opacity:.14}
+.prod{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:820px){.prod{grid-template-columns:repeat(3,1fr)}}
+.prod div{border:1px solid var(--hair);border-radius:14px;padding:16px;background:rgba(255,255,255,.5)}
+.prod b{display:block;font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;margin-bottom:8px}
+.prod p{font-size:.85rem;color:var(--ink-soft)}
+
+/* colour worlds per chapter */
+#ch-home{background:linear-gradient(180deg,var(--paper) 0%,var(--home-tint) 14%,var(--home-tint) 88%,var(--paper) 100%)}
+#ch-body{background:linear-gradient(180deg,var(--paper) 0%,var(--body-tint) 14%,var(--body-tint) 88%,var(--paper) 100%)}
+#ch-money{background:linear-gradient(180deg,var(--paper) 0%,var(--money-tint) 14%,var(--money-tint) 88%,var(--paper) 100%)}
+#ch-life{background:linear-gradient(180deg,var(--paper) 0%,var(--life-tint) 14%,var(--life-tint) 88%,var(--paper) 100%)}
+#ch-style{background:linear-gradient(180deg,var(--paper) 0%,var(--style-tint) 14%,var(--style-tint) 88%,var(--paper) 100%)}
+[data-c="home"] .ch-head h2,[data-c="home"] .ch-head .idxno,[data-c="home"] .card h3{color:var(--home)}
+[data-c="body"] .ch-head h2,[data-c="body"] .ch-head .idxno,[data-c="body"] .card h3{color:var(--body)}
+[data-c="money"] .ch-head h2,[data-c="money"] .ch-head .idxno,[data-c="money"] .card h3{color:var(--money)}
+[data-c="life"] .ch-head h2,[data-c="life"] .ch-head .idxno,[data-c="life"] .card h3{color:var(--life)}
+[data-c="style"] .ch-head h2,[data-c="style"] .ch-head .idxno,[data-c="style"] .card h3{color:var(--style)}
+[data-c="home"] .card ul li::before,[data-c="home"] .chip{background:var(--home);border-color:var(--home)}
+[data-c="body"] .card ul li::before,[data-c="body"] .chip{background:var(--body);border-color:var(--body)}
+[data-c="money"] .card ul li::before,[data-c="money"] .chip{background:var(--money);border-color:var(--money)}
+[data-c="life"] .card ul li::before,[data-c="life"] .chip{background:var(--life);border-color:var(--life)}
+[data-c="style"] .card ul li::before,[data-c="style"] .chip{background:var(--style);border-color:var(--style)}
+.chip{background:transparent!important;color:var(--ink)}
+[data-c="home"] .wchip,[data-c="home"] .prize{background:var(--home)}
+[data-c="body"] .wchip,[data-c="body"] .prize{background:var(--body)}
+[data-c="money"] .wchip,[data-c="money"] .prize{background:var(--money)}
+[data-c="life"] .wchip,[data-c="life"] .prize{background:var(--life)}
+[data-c="style"] .wchip,[data-c="style"] .prize{background:var(--style)}
+[data-c="home"] .prod b{color:var(--home)}
+[data-c="body"] .prod b{color:var(--body)}
+[data-c="money"] .prod b{color:var(--money)}
+[data-c="life"] .prod b{color:var(--life)}
+[data-c="style"] .prod b{color:var(--style)}
+
+/* ---------- WIDGET DEMO ---------- */
+#widget{
+  background:radial-gradient(120% 80% at 50% 0%, #2c2618 0%, #1b1811 55%);
+  color:#f6efe2;padding:clamp(80px,12vw,140px) 0;
+}
+#widget .kicker{color:#c9bda2}
+#widget h2{font-family:var(--serif);font-weight:600;letter-spacing:-.02em;font-size:clamp(2.2rem,8.5vw,4.6rem);margin:22px 0 12px;line-height:1}
+#widget h2 em{font-style:italic;font-weight:360}
+#widget .lede{color:#c9bda2;max-width:38em;margin-bottom:14px}
+.slots{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 34px}
+.slots span{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;padding:7px 12px;border-radius:999px;border:1px dashed rgba(246,239,226,.4);color:#d8cdb4}
+.phone{
+  max-width:400px;margin:0 auto;background:var(--paper);color:var(--ink);
+  border-radius:30px;border:1px solid rgba(246,239,226,.25);
+  box-shadow:0 34px 80px rgba(0,0,0,.5), 0 0 0 8px #0e0c08;
+  overflow:hidden;
+}
+.phone .phead{padding:18px 20px 14px;border-bottom:1px solid var(--hair);display:flex;justify-content:space-between;align-items:center}
+.phone .phead b{font-family:var(--serif);font-weight:640;letter-spacing:-.01em;font-size:1.08rem}
+.phone .phead span{font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:var(--ink-soft)}
+.pbody{padding:22px 20px 26px;min-height:430px;display:flex;flex-direction:column}
+.wq-track{display:flex;gap:5px;margin-bottom:20px}
+.wq-track i{flex:1;height:4px;border-radius:4px;background:var(--hair);transition:background .3s}
+.wq-kick{font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;font-weight:800;margin-bottom:10px}
+.wq-q{font-family:var(--serif);font-weight:560;letter-spacing:-.015em;font-size:1.35rem;line-height:1.2;margin-bottom:20px;min-height:3.4em}
+.wq-opts{display:flex;flex-direction:column;gap:10px;margin-top:auto}
+.wq-opts button{
+  font-family:var(--sans);font-size:.95rem;font-weight:600;text-align:left;
+  padding:15px 16px;border-radius:14px;border:1.4px solid var(--hair);background:#fff;color:var(--ink);
+  cursor:pointer;transition:transform .15s, border-color .15s, background .15s;
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+}
+.wq-opts button:active{transform:scale(.975)}
+.wq-opts button em{font-style:normal;opacity:.35;font-size:1.05rem}
+.wq-sponsor{margin-top:16px;text-align:center;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--ink-soft)}
+.wq-sponsor b{border:1px dashed var(--ink-soft);border-radius:6px;padding:2px 7px;margin-left:5px}
+/* results */
+.res-title{font-family:var(--serif);font-weight:640;font-size:1.5rem;letter-spacing:-.015em;text-align:center;line-height:1.15}
+.res-big{text-align:center;margin:12px 0 4px}
+.res-big b{font-family:var(--serif);font-weight:640;font-size:3.6rem;letter-spacing:-.03em;line-height:1}
+.res-big span{display:block;font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;font-weight:800;color:var(--ink-soft);margin-top:2px}
+.rings{display:flex;justify-content:space-between;gap:4px;margin:18px 0 6px}
+.ring{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
+.ring svg{width:100%;max-width:56px;transform:rotate(-90deg)}
+.ring .rl{font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800}
+.ring circle{fill:none;stroke-width:7}
+.ring .bgc{stroke:var(--hair)}
+.ring .fgc{stroke-linecap:round;stroke-dasharray:132;stroke-dashoffset:132;transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)}
+.ring .rv{font-family:var(--serif);font-weight:640;font-size:.95rem;margin-top:-4px}
+.res-cta{
+  margin-top:14px;border-radius:14px;padding:15px 16px;color:#fff;font-size:.86rem;line-height:1.4;
+}
+.res-cta b{display:block;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:5px;opacity:.85}
+.res-actions{display:flex;gap:10px;margin-top:14px}
+.res-actions button{
+  flex:1;padding:13px;border-radius:12px;font-weight:700;font-size:.85rem;cursor:pointer;
+  border:1.4px solid var(--ink);background:var(--ink);color:var(--paper);font-family:var(--sans);
+}
+.res-actions button.ghost{background:transparent;color:var(--ink)}
+.widget-notes{display:grid;grid-template-columns:1fr;gap:12px;margin-top:44px}
+@media(min-width:820px){.widget-notes{grid-template-columns:repeat(3,1fr)}}
+.widget-notes div{border:1px solid rgba(246,239,226,.2);border-radius:16px;padding:18px}
+.widget-notes b{display:block;font-family:var(--serif);font-weight:600;font-size:1.05rem;margin-bottom:6px;color:#ffd98a}
+.widget-notes p{font-size:.85rem;color:#c9bda2}
+
+/* ---------- COMMERCIAL ---------- */
+#commercial{padding:clamp(70px,11vw,130px) 0}
+#commercial h2{font-family:var(--serif);font-weight:600;letter-spacing:-.02em;font-size:clamp(2.1rem,8vw,4.4rem);margin:22px 0 8px;line-height:1.02}
+#commercial h2 em{font-style:italic;font-weight:360}
+#commercial .lede{color:var(--ink-soft);max-width:36em}
+.own{display:flex;flex-direction:column;border-top:1px solid var(--hair);margin-top:30px}
+.own-row{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:16px 4px;border-bottom:1px solid var(--hair)}
+.own-row .dotc{width:12px;height:12px;border-radius:50%}
+.own-row .t{font-family:var(--serif);font-weight:560;font-size:clamp(1.15rem,4.4vw,1.6rem);letter-spacing:-.01em}
+.own-row .t small{display:block;font-family:var(--sans);font-weight:600;font-size:.74rem;color:var(--ink-soft);letter-spacing:.02em}
+.own-row .r{font-family:var(--serif);font-weight:640;font-size:clamp(1.05rem,4vw,1.4rem);white-space:nowrap}
+.pack{
+  margin-top:34px;border-radius:22px;background:var(--ink);color:var(--paper);
+  padding:clamp(24px,5vw,40px);display:grid;grid-template-columns:1fr;gap:22px;
+}
+@media(min-width:820px){.pack{grid-template-columns:1.1fr 1fr}}
+.pack h3{font-family:var(--serif);font-weight:600;font-size:clamp(1.4rem,5vw,2rem);letter-spacing:-.015em;line-height:1.15}
+.pack h3 em{font-style:italic;font-weight:360;color:#ffd98a}
+.pack ul{list-style:none;display:flex;flex-direction:column;gap:10px;font-size:.92rem;color:#d9d2c4}
+.pack ul li{padding-left:20px;position:relative}
+.pack ul li::before{content:"✦";position:absolute;left:0;color:#ffd98a;font-size:.75em;top:.25em}
+
+/* ---------- WHY / CTA ---------- */
+#why{padding:0 0 clamp(80px,12vw,140px)}
+.why-grid{display:grid;grid-template-columns:1fr;gap:1px;background:var(--hair);border:1px solid var(--hair);margin-top:30px}
+@media(min-width:820px){.why-grid{grid-template-columns:repeat(3,1fr)}}
+.why-grid div{background:var(--paper);padding:24px 20px 28px}
+.why-grid b{font-family:var(--serif);font-weight:600;font-size:1.15rem;letter-spacing:-.01em;display:block;margin-bottom:8px}
+.why-grid p{font-size:.88rem;color:var(--ink-soft)}
+#cta{
+  background:
+    radial-gradient(90% 60% at 15% 0%, rgba(255,214,140,.5), transparent 60%),
+    radial-gradient(85% 60% at 100% 100%, rgba(178,214,170,.5), transparent 62%),
+    var(--paper-2);
+  text-align:center;padding:clamp(90px,15vw,170px) 5vw calc(clamp(90px,15vw,170px) + 40px);
+}
+#cta h2{font-family:var(--serif);font-weight:640;letter-spacing:-.028em;line-height:.98;font-size:clamp(2.8rem,12vw,7rem)}
+#cta h2 em{font-style:italic;font-weight:380}
+#cta p{margin:20px auto 0;color:var(--ink-soft);max-width:30em}
+#cta .brand{margin-top:44px;font-size:.68rem;letter-spacing:.32em;text-transform:uppercase;font-weight:800;color:var(--ink-soft)}
+#cta .brand b{color:var(--ink)}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;transition-duration:.001s!important}
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- chapter rail -->
+<nav id="rail" aria-label="Territories">
+  <a href="#ch-home"  data-c="home"  title="Home"></a>
+  <a href="#ch-body"  data-c="body"  title="Body"></a>
+  <a href="#ch-money" data-c="money" title="Money"></a>
+  <a href="#ch-life"  data-c="life"  title="Life"></a>
+  <a href="#ch-style" data-c="style" title="Style"></a>
+</nav>
+
+<!-- ============ COLD OPEN ============ -->
+<div id="intro" aria-hidden="true">
+  <p class="frost-line">Winter changed how South Africa lives.</p>
+  <p class="frost-big">Now watch what happens next.</p>
+  <small>IOL × Volt.Africa · Spring 2026</small>
+</div>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section id="hero">
+  <div class="topbar"><span><b>IOL</b> × Volt.Africa</span><span>Seasonal Platform</span></div>
+  <div class="stage">
+    <h1 class="masthead">Spring<br><em>Reset</em></h1>
+    <div class="drumline" aria-live="off">
+      <span class="fixed">your</span>
+      <span id="drum"><span class="inn" style="color:var(--life)">life</span></span>
+    </div>
+    <p class="hero-sub">One national behaviour platform. Five consumer territories. A season where South Africans actively rebuild their homes, bodies, finances, routines and confidence — with your client's brand leading each moment.</p>
+  </div>
+  <div class="hero-foot">
+    <span class="season">Aug — Nov · Spring 2026</span>
+    <span class="scrollcue">Scroll<i></i></span>
+  </div>
+</section>
+
+<!-- ============ WINTER ============ -->
+<section id="winter">
+  <div class="rail">
+    <p class="kicker reveal">The insight</p>
+    <h2 class="reveal d1">Winter creates <em>behavioural friction.</em></h2>
+    <div class="friction">
+      <div class="reveal"><b>Spending</b>increases under winter pressure</div>
+      <div class="reveal d1"><b>Activity</b>drops as routines collapse</div>
+      <div class="reveal d2"><b>Clutter</b>accumulates at home</div>
+      <div class="reveal d3"><b>Projects</b>get delayed until "someday"</div>
+      <div class="reveal d4"><b>Motivation</b>fades with the daylight</div>
+      <div class="reveal d5"><b>Momentum</b>quietly disappears</div>
+    </div>
+
+    <div class="tensions">
+      <p class="tension reveal">My home feels stuck.<small>Home tension</small></p>
+      <p class="tension reveal d1">I have no energy.<small>Body tension</small></p>
+      <p class="tension reveal d2">Winter hit my wallet.<small>Money tension</small></p>
+      <p class="tension reveal d3">Life feels chaotic.<small>Life tension</small></p>
+      <p class="tension reveal d4">I don't feel like my best self.<small>Style tension</small></p>
+    </div>
+
+    <p class="point reveal">These tensions are the opportunity ↓</p>
+  </div>
+</section>
+
+<!-- ============ THAW ============ -->
+<section id="thaw">
+  <div class="sun reveal"></div>
+  <p class="reveal d1">Then spring arrives — and millions of South Africans decide, all at once, <b>to reset.</b></p>
+</section>
+
+<!-- ============ NUMBERS ============ -->
+<section id="numbers">
+  <div class="rail">
+    <p class="kicker reveal">The platform</p>
+    <h2 class="reveal d1">The audience is already here.</h2>
+    <p class="lede reveal d2">IOL reaches the reset moment at national scale — while intent is highest and wallets are ready to act.</p>
+    <div class="stats">
+      <div class="stat reveal"><div class="num" data-count="5.8" data-suffix="M">0</div><div class="lbl">Monthly users</div></div>
+      <div class="stat reveal d1"><div class="num" data-count="21" data-suffix="M">0</div><div class="lbl">Monthly page views</div></div>
+      <div class="stat reveal d2"><div class="num" data-count="3.6" data-suffix="M">0</div><div class="lbl">Social followers</div></div>
+      <div class="stat reveal d3"><div class="num" data-count="5" data-suffix="">0</div><div class="lbl">Consumer tensions</div></div>
+      <div class="stat reveal d4"><div class="num" data-count="1" data-suffix="">0</div><div class="lbl">National platform</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TERRITORY INDEX ============ -->
+<section id="territories-index">
+  <div class="rail">
+    <div class="idx-head">
+      <h2 class="reveal">Five territories.</h2>
+      <p class="reveal d1">Each territory answers one winter tension, owns one editorial world, and is sold to one category-exclusive client.</p>
+    </div>
+    <div class="idx">
+      <a href="#ch-home" data-c="home" class="reveal"><span class="no">01</span><span class="nm">Home Reset<em>"My home feels stuck."</em></span><span class="dotc" style="background:var(--home)"></span></a>
+      <a href="#ch-body" data-c="body" class="reveal d1"><span class="no">02</span><span class="nm">Body Reset<em>"I have no energy."</em></span><span class="dotc" style="background:var(--body)"></span></a>
+      <a href="#ch-money" data-c="money" class="reveal d2"><span class="no">03</span><span class="nm">Money Reset<em>"Winter hit my wallet."</em></span><span class="dotc" style="background:var(--money)"></span></a>
+      <a href="#ch-life" data-c="life" class="reveal d3"><span class="no">04</span><span class="nm">Life Reset<em>"Life feels chaotic."</em></span><span class="dotc" style="background:var(--life)"></span></a>
+      <a href="#ch-style" data-c="style" class="reveal d4"><span class="no">05</span><span class="nm">Style Reset<em>"I don't feel like my best self."</em></span><span class="dotc" style="background:var(--style)"></span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 01 · HOME ============ -->
+<section class="chapter" id="ch-home" data-c="home">
+  <div class="rail">
+    <div class="ch-head reveal">
+      <p class="idxno">Territory 01 · Home</p>
+      <h2>Home Reset</h2>
+    </div>
+    <p class="ch-quote reveal d1">My home feels cluttered, neglected and expensive to maintain.</p>
+
+    <div class="cards">
+      <div class="card reveal">
+        <h3>Audience</h3>
+        <ul>
+          <li>Ages 30–60 · household decision-makers</li>
+          <li>Mid to upper-income households</li>
+          <li>Tensions: clutter, delayed maintenance, rising electricity costs, lack of storage, a home that feels dark after winter, entertaining season ahead</li>
+        </ul>
+      </div>
+      <div class="card reveal d1">
+        <h3>Sectors &amp; clients</h3>
+        <div class="chip-row" style="margin-bottom:14px">
+          <span class="chip">Home improvement</span><span class="chip">Furniture</span><span class="chip">Garden &amp; outdoor</span><span class="chip">Security</span><span class="chip">Insurance</span><span class="chip">Appliances</span>
+        </div>
+        <ul>
+          <li>Builders Warehouse · Leroy Merlin · BUCO</li>
+          <li>Makro · Game · Mr Price Home · Volpes</li>
+          <li>Samsung · LG · SMEG · Dulux · Plascon · CTM</li>
+          <li>OUTsurance · Santam</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="angles reveal">
+      <details>
+        <summary>Spring cleaning that actually matters <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>The clutter hotspots every South African home has</li>
+          <li>The one room you should reset first</li>
+          <li>What to throw away, donate or keep</li>
+          <li>Why decluttering feels so good psychologically</li>
+          <li>The spring cleaning checklist nobody follows (but should)</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>The home refresh <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>R500 vs R5,000: two ways to refresh your space</li>
+          <li>The cheapest ways to make your home feel new</li>
+          <li>Before-and-after room transformations</li>
+          <li>What interior designers would change first</li>
+          <li>The small upgrades with the biggest impact</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>The energy reset <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>What winter did to your electricity bill</li>
+          <li>Appliances costing you the most money</li>
+          <li>How much could you save by changing one thing?</li>
+          <li>Is solar finally worth it?</li>
+          <li>Smart homes that actually save money</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Outdoor living returns <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>Preparing your garden for spring</li>
+          <li>Braai spaces worth investing in</li>
+          <li>Patio makeovers on a budget</li>
+          <li>Small outdoor spaces with big impact</li>
+          <li>Outdoor trends for summer entertaining</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>The home mistakes you're still making <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>Why your home still feels cluttered</li>
+          <li>The organisation myths people believe</li>
+          <li>Storage products that don't actually solve the problem</li>
+          <li>Why spring cleaning never lasts · upgrades people regret</li>
+        </ul></div>
+      </details>
+    </div>
+
+    <div class="prod reveal">
+      <div><b>Display</b><p>Awareness + retargeting engine. Home improvement bursts, seasonal retail promos, appliance launches — massive reach in the high-intent research phase.</p></div>
+      <div><b>Content</b><p>"How to" articles and room transformation guides that position the brand inside the decision cycle, not around it.</p></div>
+      <div><b>Interactive add-ons</b><p style="margin-bottom:10px">Branded utility that lives beyond the campaign:</p>
+        <div class="chip-row"><span class="wchip">Home Reset Score</span><span class="wchip">Declutter Planner</span><span class="wchip">Energy Savings Calculator</span><span class="wchip">Spring Cleaning Tracker</span><span class="wchip">Makeover Budget Tool</span></div>
+      </div>
+    </div>
+
+    <div class="prize reveal"><small>Reader mechanic</small><b>WIN a home makeover by Mr Price Home worth R10 000</b><span>Competition drives entries, first-party data and sponsor love.</span></div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 02 · BODY ============ -->
+<section class="chapter" id="ch-body" data-c="body">
+  <div class="rail">
+    <div class="ch-head reveal">
+      <p class="idxno">Territory 02 · Body</p>
+      <h2>Body Reset</h2>
+    </div>
+    <p class="ch-quote reveal d1">I have no energy — and my healthy habits disappeared during winter.</p>
+
+    <div class="cards">
+      <div class="card reveal">
+        <h3>Audience</h3>
+        <ul>
+          <li>Ages 25–55 · men and women</li>
+          <li>Working professionals, parents, wellness-conscious consumers, lapsed gym members</li>
+          <li>Tensions: low energy, weight gain, poor sleep, lack of motivation, sedentary winter</li>
+          <li>Gym returners · weight-loss seekers · wellness enthusiasts</li>
+        </ul>
+      </div>
+      <div class="card reveal d1">
+        <h3>Sectors &amp; clients</h3>
+        <div class="chip-row" style="margin-bottom:14px">
+          <span class="chip">Fitness</span><span class="chip">Health</span><span class="chip">Wellness</span><span class="chip">Nutrition</span><span class="chip">Medical aid</span><span class="chip">Technology</span>
+        </div>
+        <ul>
+          <li>Planet Fitness · Virgin Active</li>
+          <li>Clicks Group · Dis-Chem</li>
+          <li>Biogen · Garmin</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="angles reveal">
+      <details>
+        <summary>The energy reset <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>Why you're still tired after winter</li>
+          <li>The habits draining your energy</li>
+          <li>What highly energetic people do differently</li>
+          <li>The science of getting your energy back</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Move again <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>Walking is making a comeback</li>
+          <li>Fitness doesn't have to mean a gym</li>
+          <li>Exercise plans for people who hate exercise</li>
+          <li>Why movement matters more than weight loss</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Sleep better <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>Why winter destroys healthy sleep routines</li>
+          <li>The bedtime habits ruining your sleep</li>
+          <li>What sleep experts recommend</li>
+          <li>How much sleep do you actually need?</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Healthy habits reset <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>The habits worth rebuilding this spring</li>
+          <li>Tiny changes that create big health improvements</li>
+          <li>How long does it really take to build a habit?</li>
+          <li>The habit systems that actually work</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Wellness without the hype <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>Health trends worth ignoring</li>
+          <li>Wellness products that actually help</li>
+          <li>Separating fact from fad · the basics people overlook</li>
+        </ul></div>
+      </details>
+    </div>
+
+    <div class="prod reveal">
+      <div><b>Display</b><p>Awareness + membership push: gym sign-up spikes, wellness campaigns, product launches on seasonal motivation.</p></div>
+      <div><b>Content &amp; social</b><p>Fitness plans, nutrition guides, sleep content — plus 30-day challenges and transformation loops that make the brand the guide, not the advertiser.</p></div>
+      <div><b>Interactive add-ons</b><p style="margin-bottom:10px">Habit-forming utility, daily return visits:</p>
+        <div class="chip-row"><span class="wchip">Energy Score Quiz</span><span class="wchip">Wellness Assessment</span><span class="wchip">Sleep Calculator</span><span class="wchip">Step Challenge</span><span class="wchip">Habit Builder</span><span class="wchip">Hydration Tracker</span></div>
+      </div>
+    </div>
+
+    <div class="prize reveal"><small>Reader mechanic</small><b>WIN a Body Reset by Planet Fitness</b><span>Membership + kit prize converts intent into sign-ups.</span></div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 03 · MONEY ============ -->
+<section class="chapter" id="ch-money" data-c="money">
+  <div class="rail">
+    <div class="ch-head reveal">
+      <p class="idxno">Territory 03 · Money</p>
+      <h2>Money Reset</h2>
+    </div>
+    <p class="ch-quote reveal d1">Winter hit my wallet.</p>
+
+    <div class="cards">
+      <div class="card reveal">
+        <h3>Audience</h3>
+        <ul>
+          <li>Ages 25–65 · household decision-makers</li>
+          <li>Young professionals · new investors</li>
+          <li>Tensions: rising living costs, debt pressure, utility bill increases, budget fatigue, saving challenges</li>
+        </ul>
+      </div>
+      <div class="card reveal d1">
+        <h3>Sectors &amp; clients</h3>
+        <div class="chip-row" style="margin-bottom:14px">
+          <span class="chip">Banking</span><span class="chip">Insurance</span><span class="chip">Investments</span><span class="chip">Fintech</span><span class="chip">Loyalty programmes</span><span class="chip">Credit providers</span>
+        </div>
+        <ul>
+          <li>Capitec · FNB · Standard Bank · Nedbank</li>
+          <li>Old Mutual · Sanlam · Momentum</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="angles reveal">
+      <details>
+        <summary>The real cost of winter <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>What winter actually cost your household</li>
+          <li>Where South Africans spent the most money this winter</li>
+          <li>The hidden costs nobody budgets for</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Spring clean your finances <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>Financial clutter costing you money</li>
+          <li>Subscriptions you probably don't need</li>
+          <li>How many debit orders do you actually use?</li>
+          <li>The money spring clean checklist</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Grocery wars <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>Which retailer is cheapest this month?</li>
+          <li>The grocery basket comparison challenge</li>
+          <li>Bulk buying: smart or wasteful?</li>
+          <li>Cutting your grocery bill without sacrificing quality</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Debt detox <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>The debt habits keeping people trapped</li>
+          <li>What financial advisers wish consumers knew</li>
+          <li>Debt snowball vs debt avalanche</li>
+          <li>Warning signs your debt is becoming a problem</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Finish the year strong <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>It's not too late to save money</li>
+          <li>The 90-day money reset challenge</li>
+          <li>Avoiding the January financial hangover</li>
+          <li>Preparing now for festive season spending</li>
+        </ul></div>
+      </details>
+    </div>
+
+    <div class="prod reveal">
+      <div><b>Display</b><p>Trust + reach: bank awareness, insurance reassurance and product comparison visibility — high frequency during the financial stress period.</p></div>
+      <div><b>Content &amp; social</b><p>"How to save" content, debt guides and budget explainers in a high-trust context — plus relatable money hacks and "you're not alone" social loops.</p></div>
+      <div><b>Interactive add-ons</b><p style="margin-bottom:10px">Utility that captures financial intent:</p>
+        <div class="chip-row"><span class="wchip">Financial Health Score</span><span class="wchip">Budget Calculator</span><span class="wchip">Grocery Savings Tool</span><span class="wchip">Debt Planner</span><span class="wchip">Savings Goal Tracker</span><span class="wchip">Subscription Audit</span></div>
+      </div>
+    </div>
+
+    <div class="prize reveal"><small>Reader mechanic</small><b>WIN a financial reset plan by Allan Gray</b><span>Advice-led prize aligns perfectly with trust positioning.</span></div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 04 · LIFE ============ -->
+<section class="chapter" id="ch-life" data-c="life">
+  <div class="rail">
+    <div class="ch-head reveal">
+      <p class="idxno">Territory 04 · Life</p>
+      <h2>Life Reset</h2>
+    </div>
+    <p class="ch-quote reveal d1">Life feels chaotic and overwhelming.</p>
+
+    <div class="cards">
+      <div class="card reveal">
+        <h3>Audience</h3>
+        <ul>
+          <li>Ages 30–55 · remote workers · small business owners</li>
+          <li>Parents, working professionals, entrepreneurs, household organisers</li>
+          <li>Tensions: lack of time, overwhelm, family logistics, digital clutter, productivity struggles</li>
+        </ul>
+      </div>
+      <div class="card reveal d1">
+        <h3>Sectors &amp; clients</h3>
+        <div class="chip-row" style="margin-bottom:14px">
+          <span class="chip">Telecoms</span><span class="chip">Technology</span><span class="chip">Education</span><span class="chip">Productivity software</span><span class="chip">Consumer electronics</span><span class="chip">Life coaching</span>
+        </div>
+        <ul>
+          <li>Vodacom · MTN · Telkom</li>
+          <li>Microsoft · Google</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="angles reveal">
+      <details>
+        <summary>The Sunday reset <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>The weekly habit successful people swear by</li>
+          <li>How to start Monday before Monday arrives</li>
+          <li>Small weekly habits that reduce stress</li>
+          <li>The ultimate weekly reset checklist</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Get organised <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>Why you're always running out of time</li>
+          <li>Organisation systems that actually work</li>
+          <li>Family planning made simple</li>
+          <li>How to stop living reactively</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Digital declutter <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>Is your phone stressing you out?</li>
+          <li>Apps you don't need anymore</li>
+          <li>Inbox overload: where to start</li>
+          <li>Digital habits worth breaking</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Simplify your life <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>What can you stop doing?</li>
+          <li>Decision fatigue is real</li>
+          <li>Why more isn't making you happier · the art of doing less</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Productivity without burnout <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>Productivity myths people still believe</li>
+          <li>Why busy isn't productive</li>
+          <li>How to focus in a distracted world</li>
+          <li>Productivity systems worth stealing</li>
+        </ul></div>
+      </details>
+    </div>
+
+    <div class="prod reveal">
+      <div><b>Display</b><p>Utility awareness for telecom bundles, productivity tools and digital services — mass reach where context improves perceived usefulness.</p></div>
+      <div><b>Content &amp; social</b><p>Productivity systems, family planning guides and declutter content position the brand as the enabler; routines and hacks drive habit adoption on social.</p></div>
+      <div><b>Interactive add-ons</b><p style="margin-bottom:10px">Everyday tools with daily-return behaviour:</p>
+        <div class="chip-row"><span class="wchip">Weekly Planner</span><span class="wchip">Habit Tracker</span><span class="wchip">Family Calendar</span><span class="wchip">Productivity Score</span><span class="wchip">Digital Declutter Tool</span><span class="wchip">AI Appointment Booking</span><span class="wchip">Receipts &amp; Expense Scanner</span></div>
+      </div>
+    </div>
+
+    <div class="prize reveal"><small>Reader mechanic</small><b>WIN a Life Reset with a professional life coach</b><span>High-perceived-value prize with strong PR angle.</span></div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 05 · STYLE ============ -->
+<section class="chapter" id="ch-style" data-c="style">
+  <div class="rail">
+    <div class="ch-head reveal">
+      <p class="idxno">Territory 05 · Style</p>
+      <h2>Style Reset</h2>
+    </div>
+    <p class="ch-quote reveal d1">I don't feel like my best self.</p>
+
+    <div class="cards">
+      <div class="card reveal">
+        <h3>Audience</h3>
+        <ul>
+          <li>Women 25–54 · young professionals</li>
+          <li>Men entering grooming categories</li>
+          <li>Tensions: lack of confidence, wardrobe fatigue, seasonal change, desire for self-improvement</li>
+        </ul>
+      </div>
+      <div class="card reveal d1">
+        <h3>Sectors &amp; clients</h3>
+        <div class="chip-row" style="margin-bottom:14px">
+          <span class="chip">Fashion</span><span class="chip">Beauty</span><span class="chip">Grooming</span><span class="chip">Cosmetics</span><span class="chip">Jewellery</span><span class="chip">Haircare</span>
+        </div>
+        <ul>
+          <li>Woolworths · Mr Price · Foschini Group · Truworths</li>
+          <li>Clicks Group · Sorbet</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="angles reveal">
+      <details>
+        <summary>The wardrobe refresh <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>The clothes you should stop keeping</li>
+          <li>Building a wardrobe that actually works</li>
+          <li>The spring pieces worth investing in</li>
+          <li>What your wardrobe says about you</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Confidence reset <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>Why confidence starts before the outfit</li>
+          <li>The psychology of looking good</li>
+          <li>Dressing for the person you want to become</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Beauty reset <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>Spring skincare essentials</li>
+          <li>Beauty routines worth simplifying</li>
+          <li>Seasonal beauty trends · products people keep repurchasing</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>The affordable upgrade <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>Looking better without spending more</li>
+          <li>Expensive-looking style on a realistic budget</li>
+          <li>Beauty splurges vs beauty saves</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>The style mistakes we keep making <span class="pm">+</span></summary>
+        <div class="body"><ul>
+          <li>Buying trends instead of staples</li>
+          <li>Why we wear only 20% of our wardrobe</li>
+          <li>What stylists would remove first</li>
+        </ul></div>
+      </details>
+    </div>
+
+    <div class="prod reveal">
+      <div><b>Display</b><p>Retail push in the seasonal buying window: fashion drops, beauty launches, promotions — strong conversion support.</p></div>
+      <div><b>Content &amp; social</b><p>Outfit guides, beauty routines and wardrobe planning reduce choice paralysis; transformations and styling reels create aspiration that drives retail demand.</p></div>
+      <div><b>Interactive add-ons</b><p style="margin-bottom:10px">Personalised style utility:</p>
+        <div class="chip-row"><span class="wchip">Style Personality Quiz</span><span class="wchip">Capsule Wardrobe Builder</span><span class="wchip">Outfit Generator</span><span class="wchip">Beauty Budget Planner</span><span class="wchip">Confidence Score</span><span class="wchip">Virtual Lookbook</span></div>
+      </div>
+    </div>
+
+    <div class="prize reveal"><small>Reader mechanic</small><b>WIN a Style Reset by Sorbet</b><span>Head-to-toe reset prize with built-in social content.</span></div>
+  </div>
+</section>
+
+<!-- ============ WIDGET DEMO ============ -->
+<section id="widget">
+  <div class="rail">
+    <p class="kicker reveal">Live demo · sellable product</p>
+    <h2 class="reveal d1">Your Reset Score.<br><em>Try it right now.</em></h2>
+    <p class="lede reveal d2">One 60-second interactive that spans all five territories — and carries five category-exclusive sponsor slots. Readers get a personal score. Sponsors get intent data, retargeting pools and a branded reset plan at the exact moment of motivation. This is how we take a brand out of the box.</p>
+    <div class="slots reveal d3">
+      <span>Home · sponsor slot</span><span>Body · sponsor slot</span><span>Money · sponsor slot</span><span>Life · sponsor slot</span><span>Style · sponsor slot</span>
+    </div>
+
+    <div class="phone reveal" id="phone">
+      <div class="phead"><b>Your Reset Score</b><span>IOL Spring Reset</span></div>
+      <div class="pbody" id="pbody"><!-- rendered by JS --></div>
+    </div>
+
+    <div class="widget-notes">
+      <div class="reveal"><b>Five brands, one product</b><p>Each territory question and result panel is individually sponsorable — "Your Money score, brought to you by ___". Category exclusivity per slot.</p></div>
+      <div class="reveal d1"><b>Data &amp; retargeting</b><p>Every completion builds a first-party intent segment per territory: low Home scores feed the Home sponsor's retargeting pool. Sold as an audience product post-campaign.</p></div>
+      <div class="reveal d2"><b>Inherently social</b><p>Scores are made to be shared. The share card carries all five sponsor marks into WhatsApp, Instagram and TikTok — organic reach the media schedule doesn't pay for.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMMERCIAL ============ -->
+<section id="commercial">
+  <div class="rail">
+    <p class="kicker reveal">The commercial architecture</p>
+    <h2 class="reveal d1">One client <em>owns</em> each moment.</h2>
+    <p class="lede reveal d2">Category exclusivity per territory. Five flagship partnerships, one national platform.</p>
+
+    <div class="own">
+      <div class="own-row reveal"><span class="dotc" style="background:var(--home)"></span><span class="t">Home<small>Retail &amp; appliances · e.g. Mr Price Home</small></span><span class="r">R190 000</span></div>
+      <div class="own-row reveal d1"><span class="dotc" style="background:var(--body)"></span><span class="t">Body<small>Fitness &amp; health · e.g. Planet Fitness</small></span><span class="r">R190 000</span></div>
+      <div class="own-row reveal d2"><span class="dotc" style="background:var(--money)"></span><span class="t">Money<small>Banking &amp; insurance · e.g. Sanlam</small></span><span class="r">R190 000</span></div>
+      <div class="own-row reveal d3"><span class="dotc" style="background:var(--life)"></span><span class="t">Life<small>Telecoms &amp; tech · e.g. Samsung</small></span><span class="r">R190 000</span></div>
+      <div class="own-row reveal d4"><span class="dotc" style="background:var(--style)"></span><span class="t">Style<small>Fashion &amp; beauty · e.g. Sorbet</small></span><span class="r">R190 000</span></div>
+    </div>
+
+    <div class="pack reveal">
+      <h3>Each territory partnership <em>includes:</em></h3>
+      <ul>
+        <li>Author profile on all owned content — evergreen</li>
+        <li>4 partnered articles</li>
+        <li>Display around all owned content — 30 days</li>
+        <li>Full takeover of the pillar — 30 days</li>
+        <li>4 × Facebook &amp; TikTok posts per article + 4 additional posts</li>
+        <li>Social media boosting</li>
+        <li>1 × article + FB + TikTok/Insta on a niche site (GQ, Glamour, House &amp; Garden or Fast Company)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY ============ -->
+<section id="why">
+  <div class="rail">
+    <p class="kicker reveal">Why Spring Reset</p>
+    <div class="why-grid">
+      <div class="reveal"><b>It solves real consumer problems</b><p>Built on five genuine post-winter tensions, not a marketing calendar moment.</p></div>
+      <div class="reveal d1"><b>Multiple advertiser entry points</b><p>Display, content, social, interactive utility and competitions — one platform, many ways in.</p></div>
+      <div class="reveal d2"><b>It supports editorial planning</b><p>Five ready-made content worlds with 25 editorial angles the newsroom can run with.</p></div>
+      <div class="reveal d3"><b>Future utility opportunities</b><p>Every widget is a product IOL keeps — reusable each season, resellable each year.</p></div>
+      <div class="reveal d4"><b>It scales across platforms</b><p>Web, social, niche titles and interactive — the architecture flexes to any budget.</p></div>
+      <div class="reveal d5"><b>Seasonal revenue, annual blueprint</b><p>Spring Reset today; Summer Ready, Winter Warm-Up and Festive Reset tomorrow.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section id="cta">
+  <h2 class="reveal">Let's <em>reset</em><br>together.</h2>
+  <p class="reveal d1">Five territories. Five exclusive partners. One season of momentum. Book a territory before your client's competitor does.</p>
+  <p class="brand reveal d2"><b>IOL</b> × Volt.Africa · Spring Reset 2026</p>
+</section>
+
+</main>
+
+<script>
+/* ============================================================
+   SPRING RESET — interactions
+   ============================================================ */
+(function(){
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- cold open melts into spring ---- */
+  const intro = document.getElementById('intro');
+  const meltDelay = reduced ? 300 : 3400;
+  setTimeout(()=>{ intro.classList.add('melt'); setTimeout(()=>intro.remove(), 1600); }, meltDelay);
+
+  /* ---- drumroll hero ---- */
+  const words = [
+    {t:'life',  c:'var(--life)'},
+    {t:'body',  c:'var(--body)'},
+    {t:'home',  c:'var(--home)'},
+    {t:'money', c:'var(--money)'},
+    {t:'style', c:'var(--style)'}
+  ];
+  const drum = document.getElementById('drum');
+  let wi = 0;
+  function cycle(){
+    const cur = drum.firstElementChild;
+    if(cur){ cur.classList.remove('inn'); cur.classList.add('out'); }
+    setTimeout(()=>{
+      wi = (wi+1) % words.length;
+      const w = words[wi];
+      drum.innerHTML = '<span class="inn" style="color:'+w.c+'">'+w.t+'</span>';
+    }, reduced ? 0 : 430);
+  }
+  if(!reduced){ setInterval(cycle, 2100); }
+
+  /* ---- scroll progress + territory colour ---- */
+  const bar = document.getElementById('progress');
+  const chapterColors = {'ch-home':'var(--home)','ch-body':'var(--body)','ch-money':'var(--money)','ch-life':'var(--life)','ch-style':'var(--style)'};
+  addEventListener('scroll', ()=>{
+    const h = document.documentElement;
+    const p = h.scrollTop / (h.scrollHeight - h.clientHeight);
+    bar.style.width = (p*100)+'%';
+  }, {passive:true});
+
+  /* ---- reveal on enter ---- */
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }});
+  },{threshold:.12, rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  /* ---- rail visibility + live chapter ---- */
+  const rail = document.getElementById('rail');
+  const railLinks = [...rail.querySelectorAll('a')];
+  const chapters = [...document.querySelectorAll('.chapter')];
+  const chIO = new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      const c = e.target.dataset.c;
+      const link = rail.querySelector('a[data-c="'+c+'"]');
+      if(e.isIntersecting){
+        railLinks.forEach(l=>l.classList.remove('live'));
+        link.classList.add('live');
+        bar.style.background = chapterColors[e.target.id];
+      }
+    });
+  },{threshold:.25});
+  chapters.forEach(c=>chIO.observe(c));
+  const railZone = new IntersectionObserver(es=>{
+    // show rail while any chapter or the index is on screen
+    let any = es.some(e=>e.isIntersecting);
+    if(any) rail.classList.add('on');
+  },{threshold:.05});
+  chapters.forEach(c=>railZone.observe(c));
+  // hide rail near widget/commercial/cta
+  const hideZone = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting) rail.classList.remove('on'); });
+  },{threshold:.15});
+  ['widget','commercial','why','cta','hero','winter'].forEach(id=>{
+    const el = document.getElementById(id); if(el) hideZone.observe(el);
+  });
+
+  /* ---- animated counters ---- */
+  const cIO = new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const el = e.target, target = parseFloat(el.dataset.count), suffix = el.dataset.suffix||'';
+      const dec = (''+target).includes('.') ? 1 : 0;
+      const dur = reduced ? 1 : 1400; const t0 = performance.now();
+      (function tick(t){
+        const p = Math.min((t-t0)/dur,1), eased = 1-Math.pow(1-p,3);
+        el.innerHTML = (target*eased).toFixed(dec) + '<sup>'+suffix+'</sup>';
+        if(p<1) requestAnimationFrame(tick);
+      })(t0);
+      cIO.unobserve(el);
+    });
+  },{threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(el=>cIO.observe(el));
+
+  /* ============================================================
+     RESET SCORE WIDGET
+     ============================================================ */
+  const Q = [
+    {c:'home',  colr:'var(--home)',  name:'Home',  q:'How does your home feel right now?',
+      opts:[['Cluttered chaos',30],['Needs a refresh',60],['Guest-ready',90]], sponsor:'HOME SPONSOR'},
+    {c:'body',  colr:'var(--body)',  name:'Body',  q:'Your energy levels lately?',
+      opts:[['Running on empty',30],['Up and down',60],['Fully charged',90]], sponsor:'BODY SPONSOR'},
+    {c:'money', colr:'var(--money)', name:'Money', q:'How did winter treat your wallet?',
+      opts:[['Ouch. Don\u2019t ask',30],['A few knocks',60],['On track',90]], sponsor:'MONEY SPONSOR'},
+    {c:'life',  colr:'var(--life)',  name:'Life',  q:'How organised is your week?',
+      opts:[['Chaos reigns',30],['Mostly juggling',60],['Systems humming',90]], sponsor:'LIFE SPONSOR'},
+    {c:'style', colr:'var(--style)', name:'Style', q:'Feeling like your best self?',
+      opts:[['Not lately',30],['Getting there',60],['Absolutely',90]], sponsor:'STYLE SPONSOR'}
+  ];
+  const body = document.getElementById('pbody');
+  let qi = 0, scores = [];
+
+  function renderQ(){
+    const item = Q[qi];
+    const track = Q.map((_,i)=>'<i style="'+(i<qi?'background:'+Q[i].colr : i===qi?'background:'+item.colr+';opacity:.45':'')+'"></i>').join('');
+    body.innerHTML =
+      '<div class="wq-track">'+track+'</div>'+
+      '<p class="wq-kick" style="color:'+item.colr+'">'+(qi+1)+' of 5 · '+item.name+' Reset</p>'+
+      '<p class="wq-q">'+item.q+'</p>'+
+      '<div class="wq-opts">'+ item.opts.map((o,i)=>
+        '<button data-v="'+o[1]+'">'+o[0]+'<em>→</em></button>').join('') +'</div>'+
+      '<p class="wq-sponsor">'+item.name+' Reset presented by<b>YOUR BRAND</b></p>';
+    body.querySelectorAll('button').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        b.style.borderColor = item.colr; b.style.background = item.colr; b.style.color = '#fff';
+        scores.push(parseInt(b.dataset.v,10));
+        setTimeout(()=>{ qi++; qi < Q.length ? renderQ() : renderRes(); }, reduced?60:340);
+      });
+    });
+  }
+
+  function renderRes(){
+    const avg = Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+    let low = 0; scores.forEach((s,i)=>{ if(s < scores[low]) low = i; });
+    const lowT = Q[low];
+    const verdict = avg>=75 ? 'You\u2019re ready to bloom.' : avg>=50 ? 'A reset is calling.' : 'Winter left its mark — time to reset.';
+    body.innerHTML =
+      '<p class="res-title">'+verdict+'</p>'+
+      '<div class="res-big"><b>'+avg+'</b><span>Your Reset Score</span></div>'+
+      '<div class="rings">'+ Q.map((t,i)=>
+        '<div class="ring">'+
+          '<svg viewBox="0 0 50 50"><circle class="bgc" cx="25" cy="25" r="21"/><circle class="fgc" cx="25" cy="25" r="21" style="stroke:'+t.colr+'" data-s="'+scores[i]+'"/></svg>'+
+          '<span class="rv" style="color:'+t.colr+'">'+scores[i]+'</span>'+
+          '<span class="rl" style="color:'+t.colr+'">'+t.name+'</span>'+
+        '</div>').join('') +'</div>'+
+      '<div class="res-cta" style="background:'+lowT.colr+'"><b>Your '+lowT.name+' score needs love</b>'+
+        'Start your '+lowT.name+' Reset with a personalised plan — presented by <u>YOUR BRAND HERE</u>.</div>'+
+      '<div class="res-actions"><button id="wshare">Share my score</button><button class="ghost" id="wredo">Start over</button></div>';
+    requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
+      body.querySelectorAll('.fgc').forEach(c=>{
+        const s = parseInt(c.dataset.s,10);
+        c.style.strokeDashoffset = 132 - (132*s/100);
+      });
+    });});
+    document.getElementById('wredo').addEventListener('click', ()=>{ qi=0; scores=[]; renderQ(); });
+    document.getElementById('wshare').addEventListener('click', function(){
+      this.textContent = 'Share card → 5 sponsor logos ✓';
+    });
+  }
+  renderQ();
+})();
+</script>
+</body>
+</html>
