@@ -395,6 +395,18 @@ section{position:relative}
 #cta .brand{margin-top:44px;font-size:.68rem;letter-spacing:.32em;text-transform:uppercase;font-weight:800;color:var(--ink-soft)}
 #cta .brand b{color:var(--ink)}
 
+/* desktop: let copy breathe across the full rail instead of wrapping tight */
+@media(min-width:900px){
+  .hero-sub{max-width:52em;font-size:1.15rem}
+  #winter h2{max-width:none}
+  .tension{font-size:clamp(1.25rem,3vw,1.9rem)}
+  #numbers .lede,#commercial .lede{max-width:54em}
+  #widget .lede{max-width:56em}
+  .idx-head p{max-width:38em}
+  .ch-quote{max-width:36em}
+  #cta p{max-width:44em}
+}
+
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001s!important;transition-duration:.001s!important}
   html{scroll-behavior:auto}
@@ -598,7 +610,7 @@ section{position:relative}
       </div>
     </div>
 
-    <div class="prize reveal"><small>Reader mechanic</small><b>WIN a home makeover by Mr Price Home worth R10 000</b><span>Competition drives entries, first-party data and sponsor love.</span></div>
+    <div class="prize reveal"><small>Reader mechanic · R35 000</small><b>WIN a home makeover by Mr Price Home worth R10 000</b><span>Competition drives entries, first-party data and sponsor love.</span></div>
   </div>
 </section>
 
@@ -689,7 +701,7 @@ section{position:relative}
       </div>
     </div>
 
-    <div class="prize reveal"><small>Reader mechanic</small><b>WIN a Body Reset by Planet Fitness</b><span>Membership + kit prize converts intent into sign-ups.</span></div>
+    <div class="prize reveal"><small>Reader mechanic · R35 000</small><b>WIN a Body Reset by Planet Fitness</b><span>Membership + kit prize converts intent into sign-ups.</span></div>
   </div>
 </section>
 
@@ -778,7 +790,7 @@ section{position:relative}
       </div>
     </div>
 
-    <div class="prize reveal"><small>Reader mechanic</small><b>WIN a financial reset plan by Allan Gray</b><span>Advice-led prize aligns perfectly with trust positioning.</span></div>
+    <div class="prize reveal"><small>Reader mechanic · R35 000</small><b>WIN a financial reset plan by Old Mutual</b><span>Advice-led prize aligns perfectly with trust positioning.</span></div>
   </div>
 </section>
 
@@ -867,7 +879,7 @@ section{position:relative}
       </div>
     </div>
 
-    <div class="prize reveal"><small>Reader mechanic</small><b>WIN a Life Reset with a professional life coach</b><span>High-perceived-value prize with strong PR angle.</span></div>
+    <div class="prize reveal"><small>Reader mechanic · R35 000</small><b>WIN a Life Reset with a professional life coach</b><span>High-perceived-value prize with strong PR angle.</span></div>
   </div>
 </section>
 
@@ -953,7 +965,7 @@ section{position:relative}
       </div>
     </div>
 
-    <div class="prize reveal"><small>Reader mechanic</small><b>WIN a Style Reset by Sorbet</b><span>Head-to-toe reset prize with built-in social content.</span></div>
+    <div class="prize reveal"><small>Reader mechanic · R35 000</small><b>WIN a Style Reset by Sorbet</b><span>Head-to-toe reset prize with built-in social content.</span></div>
   </div>
 </section>
 
@@ -993,7 +1005,10 @@ section{position:relative}
       <div class="own-row reveal d2"><span class="dotc" style="background:var(--money)"></span><span class="t">Money<small>Banking &amp; insurance · e.g. Sanlam</small></span><span class="r">R190 000</span></div>
       <div class="own-row reveal d3"><span class="dotc" style="background:var(--life)"></span><span class="t">Life<small>Telecoms &amp; tech · e.g. Samsung</small></span><span class="r">R190 000</span></div>
       <div class="own-row reveal d4"><span class="dotc" style="background:var(--style)"></span><span class="t">Style<small>Fashion &amp; beauty · e.g. Sorbet</small></span><span class="r">R190 000</span></div>
+      <div class="own-row reveal d5"><span class="dotc" style="background:conic-gradient(var(--home) 0 72deg,var(--body) 72deg 144deg,var(--money) 144deg 216deg,var(--life) 216deg 288deg,var(--style) 288deg 360deg)"></span><span class="t">Reset Score Widget<small>Own the entire interactive · all five sponsor slots, one brand</small></span><span class="r">R60 000</span></div>
+      <div class="own-row reveal d5"><span class="dotc" style="background:var(--ink-soft)"></span><span class="t">Reader Mechanic<small>Sponsored WIN competition · per territory</small></span><span class="r">R35 000</span></div>
     </div>
+    <p class="reveal" style="margin-top:12px;font-size:.78rem;font-style:italic;color:var(--ink-soft)">All rates exclude VAT.</p>
 
     <div class="pack reveal">
       <h3>Each territory partnership <em>includes:</em></h3>
